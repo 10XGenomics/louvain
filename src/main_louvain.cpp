@@ -71,6 +71,7 @@ long double max_w = 1.0L;
 
 Quality *q;
 
+unsigned seed = 0x00C0FFEE;
 bool verbose = false;
 
 void
@@ -105,6 +106,7 @@ usage(char *prog_name, const char *more) {
   cerr << "-e eps\ta given pass stops when the quality is increased by less than epsilon" << endl;
   cerr << "-l k\tdisplays the graph of level k rather than the hierachical structure" << endl;
   cerr << "\tif k=-1 then displays the hierarchical structure rather than the graph at a given level" << endl;
+  cerr << "-s seed\tuse the provided seed to initialize the random number generator" << endl;
   cerr << "-v\tverbose mode: gives computation time, information about the hierarchy and quality" << endl;
   cerr << "-h\tshow this usage message" << endl;
 
@@ -146,6 +148,10 @@ parse_args(int argc, char **argv) {
 	break;
       case 'l':
 	display_level = atoi(argv[i+1]);
+	i++;
+	break;
+      case 's':
+	seed = atoi(argv[i+1]);
 	i++;
 	break;
       case 'v':
@@ -242,10 +248,10 @@ init_quality(Graph *g, unsigned short nbc) {
 int
 main(int argc, char **argv) {
 
-  srand(0x00C0FFEE);
-  
   parse_args(argc, argv);
-  
+
+  srand(seed);
+
   time_t time_begin, time_end;
   time(&time_begin);
   
